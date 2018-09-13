@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClanBattlesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Clans">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="gameId" Type="int" />
+    <Property Name="name" Type="varchar" MaxLength="200" />
+    <Property Name="description" Type="varchar" MaxLength="800" />
+    <Property Name="rating" Type="int" />
+    <Property Name="win" Type="int" />
+    <Property Name="lose" Type="int" />
+    <Property Name="winRate" Type="float" />
+    <Property Name="urlToImage" Type="varchar" MaxLength="500" />
+    <Property Name="status" Type="char" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="Gamers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="firstName" Type="varchar" MaxLength="200" />
+    <Property Name="lastname" Type="varchar" MaxLength="200" />
+    <Property Name="email" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="birthDate" Type="date" />
+    <Property Name="address" Type="varchar" MaxLength="500" />
+    <Property Name="username" Type="varchar" MaxLength="200" />
+    <Property Name="password" Type="varchar" MaxLength="200" />
+    <Property Name="status" Type="char" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="Games">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="200" />
+    <Property Name="description" Type="varchar" MaxLength="500" />
+    <Property Name="urlWebPage" Type="varchar" MaxLength="500" />
+    <Property Name="urlToImage" Type="varchar" MaxLength="500" />
+    <Property Name="rating" Type="float" />
+    <Property Name="status" Type="char" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="LanCenters">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="200" />
+    <Property Name="ruc" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="200" />
+    <Property Name="address" Type="varchar" MaxLength="500" />
+    <Property Name="latitud" Type="float" />
+    <Property Name="longitud" Type="float" />
+    <Property Name="username" Type="varchar" MaxLength="200" />
+    <Property Name="password" Type="varchar" MaxLength="200" />
+    <Property Name="status" Type="char" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="Members">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="clanId" Type="int" />
+    <Property Name="gamerId" Type="int" />
+    <Property Name="status" Type="char" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="Reservations">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="gamerId" Type="int" />
+    <Property Name="lanCenterId" Type="int" />
+    <Property Name="description" Type="varchar" MaxLength="800" />
+    <Property Name="startDate" Type="datetime" />
+    <Property Name="numberHours" Type="int" />
+    <Property Name="isApproved" Type="bit" />
+    <Property Name="status" Type="char" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Clans_Games">
+    <End Role="Games" Type="Self.Games" Multiplicity="0..1" />
+    <End Role="Clans" Type="Self.Clans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Games">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Clans">
+        <PropertyRef Name="gameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Members_Clans">
+    <End Role="Clans" Type="Self.Clans" Multiplicity="0..1" />
+    <End Role="Members" Type="Self.Members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clans">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Members">
+        <PropertyRef Name="clanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Members_Gamers">
+    <End Role="Gamers" Type="Self.Gamers" Multiplicity="0..1" />
+    <End Role="Members" Type="Self.Members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Gamers">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Members">
+        <PropertyRef Name="gamerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservations_Gamers">
+    <End Role="Gamers" Type="Self.Gamers" Multiplicity="0..1" />
+    <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Gamers">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Reservations">
+        <PropertyRef Name="gamerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservations_LanCenters">
+    <End Role="LanCenters" Type="Self.LanCenters" Multiplicity="0..1" />
+    <End Role="Reservations" Type="Self.Reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LanCenters">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Reservations">
+        <PropertyRef Name="lanCenterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ClanBattlesModelStoreContainer">
+    <EntitySet Name="Clans" EntityType="Self.Clans" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Gamers" EntityType="Self.Gamers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LanCenters" EntityType="Self.LanCenters" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Clans_Games" Association="Self.FK_Clans_Games">
+      <End Role="Games" EntitySet="Games" />
+      <End Role="Clans" EntitySet="Clans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Members_Clans" Association="Self.FK_Members_Clans">
+      <End Role="Clans" EntitySet="Clans" />
+      <End Role="Members" EntitySet="Members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Members_Gamers" Association="Self.FK_Members_Gamers">
+      <End Role="Gamers" EntitySet="Gamers" />
+      <End Role="Members" EntitySet="Members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservations_Gamers" Association="Self.FK_Reservations_Gamers">
+      <End Role="Gamers" EntitySet="Gamers" />
+      <End Role="Reservations" EntitySet="Reservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservations_LanCenters" Association="Self.FK_Reservations_LanCenters">
+      <End Role="LanCenters" EntitySet="LanCenters" />
+      <End Role="Reservations" EntitySet="Reservations" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
